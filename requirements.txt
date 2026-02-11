@@ -1,0 +1,4 @@
+PyQt6>=6.5.0
+reportlab>=4.0
+Pygments>=2.16.0
+pyinstaller>=6.0
