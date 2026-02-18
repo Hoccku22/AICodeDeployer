@@ -1,4 +1,4 @@
-# PythonProject
+# AICodeDeployer
 
 AI Code Deployer - parse AI responses and deploy projects
 
@@ -23,11 +23,6 @@ pip install -r requirements.txt
 ## Запуск
 ```bash
 python main.py
-```
-
-## Сборка
-```bash
-none
 ```
 
 ---
