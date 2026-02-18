@@ -12,29 +12,11 @@ logger = logging.getLogger(__name__)
 class ProjectDeployer:
     """Создание проекта на диске из модели Project"""
 
-    def deploy(
-            self,
-            project: Project,
-            target_dir: str,
-            overwrite: bool = False
-    ) -> str:
-        """
-        Развернуть проект.
-
-        Args:
-            project: Объект проекта
-            target_dir: Корневая директория для проектов
-            overwrite: Перезаписывать ли существующие файлы
-
-        Returns:
-            Путь к созданному проекту
-        """
+    def deploy(self, project: Project, target_dir: str, overwrite: bool = False) -> str:
         project_dir = Path(target_dir) / project.metadata.name
 
-        # Проверка существования
         if project_dir.exists():
             if not overwrite:
-                # Добавляем суффикс
                 counter = 1
                 while project_dir.exists():
                     project_dir = Path(target_dir) / f"{project.metadata.name}_{counter}"
@@ -44,18 +26,13 @@ class ProjectDeployer:
 
         logger.info(f"Создаю проект: {project_dir}")
 
-        # Создаём директорию проекта
         project_dir.mkdir(parents=True, exist_ok=True)
 
-        # Создаём файлы
         created_files = 0
         for pf in project.files:
             file_path = project_dir / pf.relative_path
-
-            # Создаём поддиректории
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-            # Записываем файл
             try:
                 file_path.write_text(pf.content, encoding='utf-8')
                 created_files += 1
@@ -63,7 +40,6 @@ class ProjectDeployer:
             except Exception as e:
                 logger.error(f"  Ошибка создания {pf.relative_path}: {e}")
 
-        # Создаём README если его нет
         readme_exists = any(
             f.relative_path.lower() in ('readme.md', 'readme.txt', 'readme')
             for f in project.files
@@ -79,7 +55,6 @@ class ProjectDeployer:
         return str(project_dir)
 
     def _create_readme(self, project: Project, project_dir: Path):
-        """Автоматически создать README.md"""
         meta = project.metadata
         lines = [f"# {meta.name}"]
 

@@ -178,7 +178,6 @@ class ProjectExporter:
     def _create_styles(self):
         styles = getSampleStyleSheet()
 
-        # override built-in styles to use our fonts
         styles["Title"].fontName = self.SANS_FONT_BOLD
         styles["Title"].fontSize = 20
         styles["Title"].leading = 26
@@ -257,7 +256,6 @@ class ProjectExporter:
 
         story = []
 
-        # title page
         story.append(Spacer(1, 4 * cm))
         story.append(Paragraph(
             self._escape(project.metadata.name),
@@ -293,13 +291,11 @@ class ProjectExporter:
 
         story.append(PageBreak())
 
-        # structure
         story.append(Paragraph("Project Structure", self.styles['Heading1']))
         story.append(Preformatted(project.get_tree(), self.styles['TreeStyle']))
         story.append(Spacer(1, 0.5 * cm))
         story.append(PageBreak())
 
-        # files
         story.append(Paragraph("Project Files", self.styles['Heading1']))
         story.append(Spacer(1, 0.3 * cm))
 
@@ -334,7 +330,6 @@ class ProjectExporter:
             if (i + 1) % 3 == 0 and i < len(project.files) - 1:
                 story.append(PageBreak())
 
-        # ai format section
         story.append(PageBreak())
         story.append(Paragraph("AI Format (for reimport)", self.styles['Heading1']))
         story.append(Paragraph(
@@ -350,6 +345,7 @@ class ProjectExporter:
         story.append(Preformatted(ai_text, self.styles['CodeBlock']))
 
         doc.build(story)
+
         logger.info("PDF created: " + output_path)
         return output_path
 
@@ -373,8 +369,7 @@ class ProjectExporter:
         return rows
 
     def _escape(self, text):
-        return (text
-            .replace('&', '&amp;')
-            .replace('<', '&lt;')
-            .replace('>', '&gt;')
-        )
+        result = text.replace('&', '&amp;')
+        result = result.replace('<', '&lt;')
+        result = result.replace('>', '&gt;')
+        return result

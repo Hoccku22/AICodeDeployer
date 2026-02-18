@@ -2,20 +2,15 @@
 
 TRANSLATIONS = {
     "ru": {
-        # Window
+        "reports_copy_file": "Копировать файл",
         "app_title": "AI Code Deployer",
-
-        # Directory panel
         "working_directory": "Рабочая директория",
         "browse": "Обзор",
         "refresh": "Обновить",
-
-        # Tabs
         "tab_import": "Импорт",
         "tab_export": "Экспорт",
+        "tab_reports": "Отчёты",
         "tab_help": "Помощь",
-
-        # Import tab
         "copy_prompt_for_ai": "Скопировать промпт для ИИ:",
         "paste_ai_response": "Вставьте ответ ИИ:",
         "chars_count": "{} символов",
@@ -31,53 +26,43 @@ TRANSLATIONS = {
         "overwrite_existing": "Перезаписать существующий",
         "clear": "Очистить",
         "analysis_result": "Результат анализа:",
-
-        # Export tab
         "select_project_to_export": "Выберите проект для экспорта",
         "find_projects": "Найти проекты",
         "browse_folder": "Выбрать папку",
         "export_pdf": "Экспорт PDF",
         "copy_ai_format": "Копировать AI формат",
         "export_preview": "Предпросмотр экспорта:",
-
-        # Help tab
         "help_title": "Как использовать AI Code Deployer",
         "help_content": (
             "<h2>Быстрый старт</h2>"
             "<ol>"
-            "<li><b>Скопируйте промпт</b> — нажмите зелёную кнопку на вкладке Импорт</li>"
-            "<li><b>Отправьте промпт ИИ</b> — вместе с описанием вашего проекта</li>"
-            "<li><b>Вставьте ответ</b> — в текстовое поле на вкладке Импорт</li>"
-            "<li><b>Анализируйте</b> — нажмите кнопку Анализировать</li>"
-            "<li><b>Создайте проект</b> — нажмите Создать проект</li>"
+            "<li><b>Скопируйте промпт</b> - нажмите зелёную кнопку на вкладке Импорт</li>"
+            "<li><b>Отправьте промпт ИИ</b> - вместе с описанием вашего проекта</li>"
+            "<li><b>Вставьте ответ</b> - в текстовое поле на вкладке Импорт</li>"
+            "<li><b>Анализируйте</b> - нажмите кнопку Анализировать</li>"
+            "<li><b>Создайте проект</b> - нажмите Создать проект</li>"
             "</ol>"
             "<h2>Экспорт</h2>"
             "<p>Вкладка Экспорт позволяет сканировать существующие проекты и экспортировать их в PDF или AI формат.</p>"
+            "<h2>Отчёты</h2>"
+            "<p>Вкладка Отчёты показывает все PDF отчёты из рабочей директории. Можно открыть, скопировать путь или удалить.</p>"
             "<h2>Горячие клавиши</h2>"
             "<ul>"
-            "<li><b>Ctrl+V</b> — Вставить</li>"
-            "<li><b>Ctrl+Enter</b> — Анализировать</li>"
-            "<li><b>Ctrl+D</b> — Создать проект</li>"
-            "<li><b>Ctrl+E</b> — Экспорт PDF</li>"
-            "<li><b>Ctrl+T</b> — Сменить тему</li>"
+            "<li><b>Ctrl+V</b> - Вставить</li>"
+            "<li><b>Ctrl+Enter</b> - Анализировать</li>"
+            "<li><b>Ctrl+D</b> - Создать проект</li>"
+            "<li><b>Ctrl+E</b> - Экспорт PDF</li>"
+            "<li><b>Ctrl+T</b> - Сменить тему</li>"
             "</ul>"
         ),
-
-        # Theme button
         "theme_dark": "Тема: Тёмная",
         "theme_light": "Тема: Светлая",
-
-        # Language button
         "lang_label": "Язык: Русский",
-
-        # Status
         "ready": "Готово",
         "analyzing": "Анализ...",
         "deploying": "Создание проекта...",
         "exporting_pdf": "Экспорт PDF...",
         "scanning": "Сканирование...",
-
-        # Messages
         "no_text_to_analyze": "Нет текста для анализа",
         "paste_text_first": "Сначала вставьте текст ответа ИИ.",
         "analysis_complete": "Анализ завершён",
@@ -108,30 +93,39 @@ TRANSLATIONS = {
         "scan_error": "Ошибка сканирования",
         "found_projects": "Найдено проектов: {}",
         "select_directory": "Выбрать директорию",
-
-        # Prompt variants
         "prompt_full": "Полный промпт",
         "prompt_short": "Короткий промпт",
         "prompt_continue": "Продолжение",
         "prompt_refactor": "Рефакторинг",
         "prompt_add_feature": "Добавить фичу",
+        "reports_refresh": "Обновить список",
+        "reports_open": "Открыть",
+        "reports_copy_path": "Копировать путь",
+        "reports_delete": "Удалить",
+        "reports_open_folder": "Открыть папку",
+        "reports_no_dir": "Выберите рабочую директорию для поиска отчётов.",
+        "reports_empty": "PDF отчёты не найдены.",
+        "reports_found": "Найдено отчётов: {}",
+        "reports_deleted": "Отчёт удалён: {}",
+        "reports_delete_confirm": "Удалить отчёт?",
+        "reports_delete_confirm_text": "Вы уверены, что хотите удалить:\n{}?",
+        "reports_delete_error": "Ошибка удаления",
+        "reports_path_copied": "Путь скопирован в буфер обмена!",
+        "reports_col_name": "Имя файла",
+        "reports_col_project": "Проект",
+        "reports_col_size": "Размер",
+        "reports_col_date": "Дата",
     },
-
     "en": {
-        # Window
+        "reports_copy_file": "Copy file",
         "app_title": "AI Code Deployer",
-
-        # Directory panel
         "working_directory": "Working Directory",
         "browse": "Browse",
         "refresh": "Refresh",
-
-        # Tabs
         "tab_import": "Import",
         "tab_export": "Export",
+        "tab_reports": "Reports",
         "tab_help": "Help",
-
-        # Import tab
         "copy_prompt_for_ai": "Copy prompt for AI:",
         "paste_ai_response": "Paste AI response:",
         "chars_count": "{} chars",
@@ -147,53 +141,43 @@ TRANSLATIONS = {
         "overwrite_existing": "Overwrite existing",
         "clear": "Clear",
         "analysis_result": "Analysis Result:",
-
-        # Export tab
         "select_project_to_export": "Select project to export",
         "find_projects": "Find Projects",
         "browse_folder": "Browse Folder",
         "export_pdf": "Export PDF",
         "copy_ai_format": "Copy AI Format",
         "export_preview": "Export Preview:",
-
-        # Help tab
         "help_title": "How to use AI Code Deployer",
         "help_content": (
             "<h2>Quick Start</h2>"
             "<ol>"
-            "<li><b>Copy prompt</b> — click the green button on the Import tab</li>"
-            "<li><b>Send prompt to AI</b> — along with your project description</li>"
-            "<li><b>Paste response</b> — into the text field on the Import tab</li>"
-            "<li><b>Analyze</b> — click the Analyze button</li>"
-            "<li><b>Create project</b> — click Create Project</li>"
+            "<li><b>Copy prompt</b> - click the green button on the Import tab</li>"
+            "<li><b>Send prompt to AI</b> - along with your project description</li>"
+            "<li><b>Paste response</b> - into the text field on the Import tab</li>"
+            "<li><b>Analyze</b> - click the Analyze button</li>"
+            "<li><b>Create project</b> - click Create Project</li>"
             "</ol>"
             "<h2>Export</h2>"
             "<p>The Export tab allows you to scan existing projects and export them to PDF or AI format.</p>"
+            "<h2>Reports</h2>"
+            "<p>The Reports tab shows all PDF reports from the working directory. You can open, copy path or delete them.</p>"
             "<h2>Keyboard Shortcuts</h2>"
             "<ul>"
-            "<li><b>Ctrl+V</b> — Paste</li>"
-            "<li><b>Ctrl+Enter</b> — Analyze</li>"
-            "<li><b>Ctrl+D</b> — Deploy project</li>"
-            "<li><b>Ctrl+E</b> — Export PDF</li>"
-            "<li><b>Ctrl+T</b> — Toggle theme</li>"
+            "<li><b>Ctrl+V</b> - Paste</li>"
+            "<li><b>Ctrl+Enter</b> - Analyze</li>"
+            "<li><b>Ctrl+D</b> - Deploy project</li>"
+            "<li><b>Ctrl+E</b> - Export PDF</li>"
+            "<li><b>Ctrl+T</b> - Toggle theme</li>"
             "</ul>"
         ),
-
-        # Theme button
         "theme_dark": "Theme: Dark",
         "theme_light": "Theme: Light",
-
-        # Language button
         "lang_label": "Lang: English",
-
-        # Status
         "ready": "Ready",
         "analyzing": "Analyzing...",
         "deploying": "Deploying...",
         "exporting_pdf": "Exporting PDF...",
         "scanning": "Scanning...",
-
-        # Messages
         "no_text_to_analyze": "No text to analyze",
         "paste_text_first": "Paste AI response text first.",
         "analysis_complete": "Analysis complete",
@@ -224,13 +208,28 @@ TRANSLATIONS = {
         "scan_error": "Scan error",
         "found_projects": "Found projects: {}",
         "select_directory": "Select directory",
-
-        # Prompt variants
         "prompt_full": "Full Prompt",
         "prompt_short": "Short Prompt",
         "prompt_continue": "Continue",
         "prompt_refactor": "Refactor",
         "prompt_add_feature": "Add Feature",
+        "reports_refresh": "Refresh list",
+        "reports_open": "Open",
+        "reports_copy_path": "Copy path",
+        "reports_delete": "Delete",
+        "reports_open_folder": "Open folder",
+        "reports_no_dir": "Select a working directory to search for reports.",
+        "reports_empty": "No PDF reports found.",
+        "reports_found": "Reports found: {}",
+        "reports_deleted": "Report deleted: {}",
+        "reports_delete_confirm": "Delete report?",
+        "reports_delete_confirm_text": "Are you sure you want to delete:\n{}?",
+        "reports_delete_error": "Delete error",
+        "reports_path_copied": "Path copied to clipboard!",
+        "reports_col_name": "Filename",
+        "reports_col_project": "Project",
+        "reports_col_size": "Size",
+        "reports_col_date": "Date",
     }
 }
 
@@ -257,7 +256,6 @@ class Localization:
             self._lang = value
 
     def t(self, key, *args):
-        """Get translation for key, with optional format args"""
         text = TRANSLATIONS.get(self._lang, {}).get(key, key)
         if args:
             return text.format(*args)

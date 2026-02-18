@@ -41,6 +41,7 @@ class ProjectFile:
         }
         ext = self.extension.lower()
         fname = self.filename.lower()
+
         if fname == "dockerfile":
             self.language = "dockerfile"
         elif fname == ".gitignore":
@@ -68,12 +69,12 @@ class ProjectMetadata:
 
 
 def encode_for_ai(text: str) -> str:
-    # обратная операция: код -> плейсхолдеры для AI формата
     text = text.replace("__", "DUNDER")
     text = text.replace("_", "USCORE")
     text = text.replace("`", "BACKTICK")
     text = text.replace("~", "TILDE")
     text = text.replace("*", "STARSIGN")
+
     lines = text.split("\n")
     encoded = []
     for line in lines:
@@ -85,7 +86,7 @@ def encode_for_ai(text: str) -> str:
                 break
         if indent_count > 0:
             line = "." * indent_count + line[indent_count:]
-        # hash at start of line
+
         stripped_after_dots = line.lstrip(".")
         if stripped_after_dots.startswith("#"):
             dot_part = line[:len(line) - len(stripped_after_dots)]
@@ -111,9 +112,11 @@ class Project:
     def get_tree(self) -> str:
         if not self.files:
             return "(empty)"
+
         lines = [self.metadata.name + "/"]
         paths = sorted(f.relative_path for f in self.files)
         seen_dirs = set()
+
         for p in paths:
             parts = Path(p).parts
             for i in range(len(parts) - 1):
@@ -124,6 +127,7 @@ class Project:
                     lines.append(indent + parts[i] + "/")
             indent = "  " * len(parts)
             lines.append(indent + parts[-1])
+
         return "\n".join(lines)
 
     def to_ai_format(self) -> str:
@@ -131,6 +135,7 @@ class Project:
         out += "PROJSTART\n"
         out += "METASTART\n"
         out += "PROJECT_NAME: " + self.metadata.name + "\n"
+
         if self.metadata.description:
             out += "DESCRIPTION: " + self.metadata.description + "\n"
         if self.metadata.version:
@@ -147,12 +152,14 @@ class Project:
             out += "BUILD_COMMAND: " + self.metadata.build_command + "\n"
         if self.metadata.install_command:
             out += "INSTALL_COMMAND: " + self.metadata.install_command + "\n"
+
         out += "METAEND\n"
         out += "\n"
         out += "STRUCTSTART\n"
         tree = self.get_tree()
         out += encode_for_ai(tree) + "\n"
         out += "STRUCTEND\n"
+
         for f in self.files:
             out += "\n"
             out += "FILESTART\n"
@@ -168,6 +175,7 @@ class Project:
             out += encode_for_ai(f.content) + "\n"
             out += "CODEEND\n"
             out += "FILEEND\n"
+
         out += "\n"
         out += "PROJEND\n"
         return out

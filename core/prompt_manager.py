@@ -1,5 +1,4 @@
 # core/prompt_manager.py
-
 from dataclasses import dataclass
 from typing import Dict
 
@@ -13,7 +12,6 @@ class PromptVariant:
     content: str
 
 
-# таблица замен: плейсхолдер -> реальный символ
 REPLACEMENTS = {
     "DUNDER": "__",
     "USCORE": "_",
@@ -24,7 +22,6 @@ REPLACEMENTS = {
     "TILDE": "~",
 }
 
-# точка в начале строки = пробел
 INDENT_CHAR = "."
 
 
@@ -32,7 +29,6 @@ def restore_code(text: str) -> str:
     lines = text.split("\n")
     restored = []
     for line in lines:
-        # восстанавливаем отступы: точки в начале строки -> пробелы
         indent_count = 0
         for ch in line:
             if ch == INDENT_CHAR:
@@ -41,8 +37,7 @@ def restore_code(text: str) -> str:
                 break
         if indent_count > 0:
             line = " " * indent_count + line[indent_count:]
-        # восстанавливаем плейсхолдеры
-        # порядок важен: сначала длинные чтобы DUNDER не сломал USCORE
+
         line = line.replace("TRIPLEBACKTICK", "```")
         line = line.replace("DUNDER", "__")
         line = line.replace("BACKTICK", "`")

@@ -25,7 +25,6 @@ def main():
     app.setApplicationName("AI Code Deployer")
     app.setStyle("Fusion")
 
-    # Шрифт по умолчанию
     font = QFont("Segoe UI", 10)
     app.setFont(font)
 

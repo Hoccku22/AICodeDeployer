@@ -29,16 +29,19 @@ class AIFormatParser:
             text = text[start + 9:]
         if end != -1:
             text = text[:text.find("PROJEND")]
+
         meta_start = text.find("METASTART")
         meta_end = text.find("METAEND")
         if meta_start != -1 and meta_end != -1:
             meta_text = text[meta_start + 9:meta_end]
             project.metadata = self._parse_meta(meta_text)
+
         struct_start = text.find("STRUCTSTART")
         struct_end = text.find("STRUCTEND")
         if struct_start != -1 and struct_end != -1:
             raw_struct = text[struct_start + 11:struct_end].strip()
             project.structure_description = restore_code(raw_struct)
+
         file_chunks = text.split("FILESTART")
         for chunk in file_chunks[1:]:
             end_pos = chunk.find("FILEEND")
@@ -47,6 +50,7 @@ class AIFormatParser:
             pf = self._parse_plain_file(chunk)
             if pf:
                 project.files.append(pf)
+
         logger.info("Parsed: " + project.metadata.name + " " + str(len(project.files)) + " files")
         return project
 
@@ -65,6 +69,7 @@ class AIFormatParser:
             "BUILD_COMMAND": "build_command",
             "INSTALL_COMMAND": "install_command",
         }
+
         restored = restore_code(text)
         for line in restored.strip().splitlines():
             line = line.strip()
@@ -88,6 +93,7 @@ class AIFormatParser:
         description = ""
         code_lines = []
         in_code = False
+
         for line in lines:
             stripped = line.strip()
             if stripped == "CODESTART":
@@ -105,18 +111,20 @@ class AIFormatParser:
                 filetype = stripped[9:].strip()
             elif stripped.startswith("FILEDESC:"):
                 description = stripped[9:].strip()
+
         if not path:
             return None
-        # восстанавливаем плейсхолдеры в пути
+
         path = restore_code(path)
-        # если путь gitignore без точки то добавляем точку
         if path.endswith("gitignore") and not path.endswith(".gitignore"):
             parts = path.rsplit("gitignore", 1)
             path = parts[0] + ".gitignore"
+
         description = restore_code(description)
         filetype = restore_code(filetype)
         raw_code = "\n".join(code_lines)
         restored_code = restore_code(raw_code)
+
         pf = ProjectFile(relative_path=path, content=restored_code, language=filetype, description=description)
         if not pf.language:
             pf.auto_detect_language()
@@ -127,12 +135,15 @@ class AIFormatParser:
         match = re.search(r'===PROJECT_START===(.*?)===PROJECT_END===', text, re.DOTALL)
         if match:
             text = match.group(1)
+
         meta_match = re.search(r'---META_START---(.*?)---META_END---', text, re.DOTALL)
         if meta_match:
             project.metadata = self._parse_meta(meta_match.group(1))
+
         struct_match = re.search(r'---STRUCTURE_START---(.*?)---STRUCTURE_END---', text, re.DOTALL)
         if struct_match:
             project.structure_description = struct_match.group(1).strip()
+
         file_blocks = re.findall(r'---FILE_START---(.*?)---FILE_END---', text, re.DOTALL)
         for block in file_blocks:
             pf = self._parse_legacy_file(block)
@@ -145,12 +156,15 @@ class AIFormatParser:
         match = re.search(r'\[PROJECT_BEGIN\](.*?)\[PROJECT_FINISH\]', text, re.DOTALL)
         if match:
             text = match.group(1)
+
         meta_match = re.search(r'\[META_BEGIN\](.*?)\[META_FINISH\]', text, re.DOTALL)
         if meta_match:
             project.metadata = self._parse_meta(meta_match.group(1))
+
         struct_match = re.search(r'\[STRUCT_BEGIN\](.*?)\[STRUCT_FINISH\]', text, re.DOTALL)
         if struct_match:
             project.structure_description = struct_match.group(1).strip()
+
         file_blocks = re.findall(r'\[FILE_BEGIN\](.*?)\[FILE_FINISH\]', text, re.DOTALL)
         for block in file_blocks:
             pf = self._parse_legacy_file(block)
@@ -164,6 +178,7 @@ class AIFormatParser:
         description = ""
         content_lines = []
         in_code = False
+
         for line in lines:
             stripped = line.strip()
             if not in_code:
@@ -182,23 +197,28 @@ class AIFormatParser:
                     in_code = False
                 else:
                     content_lines.append(line)
+
         if not path:
             return None
+
         pf = ProjectFile(relative_path=path, content="\n".join(content_lines), description=description)
         pf.auto_detect_language()
         return pf
 
     def _parse_markdown(self, text: str) -> Project:
         project = Project()
+
         title_match = re.search(r'^#\s+(.+)$', text, re.MULTILINE)
         if title_match:
             name = title_match.group(1).strip()
             name = re.sub(r'[*_`]', '', name)
             project.metadata.name = self._slugify(name)
+
         pattern = re.compile(
-            r'(?:^|\n)(?:#{1,6}\s+[`*]*([^\n`*]+\.\w+)[`*]*|[`*]{1,3}([^\n`*]+\.\w+)[`*]{1,3}|(?:файл|file|create)\s*[:\-]?\s*[`*]*([^\n`*]+\.\w+)[`*]*).*?\n```(\w*)\n(.*?)\n```',
+            r'(?:^|\n)(?:#{1,6}\s+[`*]*([^\n`*]+\.\w+)[`*]*|[`*]{1,3}([^\n`*]+\.\w+)[`*]{1,3}|(?:файл|file|create)\s*[:\-]?\s*[`*]*([^\n`*]+\.\w+)[`*]*)\s*\n```(\w*)\n(.*?)\n```',
             re.DOTALL | re.IGNORECASE | re.MULTILINE
         )
+
         for match in pattern.finditer(text):
             path = match.group(1) or match.group(2) or match.group(3)
             lang = match.group(4) or ""
@@ -209,14 +229,17 @@ class AIFormatParser:
                 if not pf.language:
                     pf.auto_detect_language()
                 project.files.append(pf)
+
         if not project.files:
             project.files = self._parse_simple_codeblocks(text)
+
         if not project.metadata.name and project.files:
             first = project.files[0].relative_path
             if '/' in first:
                 project.metadata.name = Path(first).parts[0]
             else:
                 project.metadata.name = Path(first).stem
+
         return project
 
     def _parse_simple_codeblocks(self, text: str) -> List[ProjectFile]:
@@ -227,11 +250,13 @@ class AIFormatParser:
             before = parts[i]
             lang = parts[i + 1]
             code_and_rest = parts[i + 2]
+
             code_end = code_and_rest.find('\n```')
             if code_end == -1:
                 code = code_and_rest
             else:
                 code = code_and_rest[:code_end]
+
             path = self._extract_filename(before)
             if path:
                 pf = ProjectFile(relative_path=path, content=code, language=lang)

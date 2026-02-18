@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 class ProjectScanner:
     """Поиск папок проектов и сканирование существующих проектов"""
 
-    # Типичные папки для проектов
     COMMON_PROJECT_DIRS = [
         "Projects", "projects",
         "Dev", "dev",
@@ -24,7 +23,6 @@ class ProjectScanner:
         "GitLab", "gitlab",
     ]
 
-    # Файлы-индикаторы того, что папка — это проект
     PROJECT_INDICATORS = [
         "package.json", "requirements.txt", "setup.py", "pyproject.toml",
         "Cargo.toml", "go.mod", "pom.xml", "build.gradle",
@@ -33,7 +31,6 @@ class ProjectScanner:
         "manage.py", ".gitignore",
     ]
 
-    # Игнорируемые директории
     IGNORE_DIRS = {
         '__pycache__', 'node_modules', '.git', '.svn', '.hg',
         'venv', '.venv', 'env', '.env', '.idea', '.vscode',
@@ -42,7 +39,6 @@ class ProjectScanner:
         'bin', 'obj',
     }
 
-    # Игнорируемые расширения
     IGNORE_EXTENSIONS = {
         '.pyc', '.pyo', '.class', '.o', '.obj', '.exe',
         '.dll', '.so', '.dylib', '.bin', '.dat',
@@ -55,27 +51,22 @@ class ProjectScanner:
     }
 
     def find_project_directories(self) -> List[str]:
-        """Найти вероятные директории с проектами"""
         home = Path.home()
         found = []
 
-        # Проверяем стандартные пути
         for dirname in self.COMMON_PROJECT_DIRS:
             path = home / dirname
             if path.exists() and path.is_dir():
                 found.append(str(path))
 
-        # Desktop
         desktop = home / "Desktop"
         if desktop.exists():
             found.append(str(desktop))
 
-        # Documents
         documents = home / "Documents"
         if documents.exists():
             found.append(str(documents))
 
-        # Windows-specific
         if platform.system() == "Windows":
             for drive in ['C:', 'D:', 'E:']:
                 for dirname in self.COMMON_PROJECT_DIRS:
@@ -83,13 +74,11 @@ class ProjectScanner:
                     if path.exists():
                         found.append(str(path))
 
-        # macOS-specific
         if platform.system() == "Darwin":
             dev_path = home / "Developer"
             if dev_path.exists():
                 found.append(str(dev_path))
 
-        # Убираем дубли, сохраняя порядок
         seen = set()
         unique = []
         for p in found:
@@ -101,9 +90,6 @@ class ProjectScanner:
         return unique
 
     def scan_project(self, project_path: str) -> Project:
-        """
-        Сканировать существующий проект и создать объект Project.
-        """
         root = Path(project_path)
 
         if not root.exists():
@@ -112,28 +98,23 @@ class ProjectScanner:
         project = Project()
         project.metadata.name = root.name
 
-        # Сканируем файлы
         for file_path in sorted(root.rglob('*')):
             if not file_path.is_file():
                 continue
 
-            # Проверяем, не в игнорируемой ли директории
             relative = file_path.relative_to(root)
             parts = relative.parts
 
             if any(part in self.IGNORE_DIRS for part in parts):
                 continue
 
-            # Проверяем расширение
             if file_path.suffix.lower() in self.IGNORE_EXTENSIONS:
                 continue
 
-            # Проверяем размер (пропускаем файлы > 500KB)
             if file_path.stat().st_size > 500 * 1024:
                 logger.debug(f"Пропущен (слишком большой): {relative}")
                 continue
 
-            # Читаем содержимое
             try:
                 content = file_path.read_text(encoding='utf-8')
             except (UnicodeDecodeError, PermissionError):
@@ -150,7 +131,6 @@ class ProjectScanner:
             pf.auto_detect_language()
             project.files.append(pf)
 
-        # Пробуем определить метаданные из файлов проекта
         self._detect_metadata(project)
 
         logger.info(
@@ -162,7 +142,6 @@ class ProjectScanner:
         return project
 
     def _detect_metadata(self, project: Project):
-        """Определить метаданные из содержимого файлов"""
         for pf in project.files:
             fname = pf.filename.lower()
 
@@ -178,7 +157,6 @@ class ProjectScanner:
                 project.metadata.language = "Go"
 
     def _parse_package_json(self, project: Project, content: str):
-        """Извлечь инфо из package.json"""
         import json
         try:
             data = json.loads(content)

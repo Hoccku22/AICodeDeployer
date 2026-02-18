@@ -1,4 +1,4 @@
-# Python
+#Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,31 +7,25 @@ __pycache__/
 dist/
 build/
 *.egg
-
-# Virtual environment
+#Virtual environment
 venv/
-.venv/
+ venv/
 env/
-.env/
-
-# PyInstaller
+ env/
+#PyInstaller
 *.spec
 !build.spec
-
-# IDE
-.idea/
-.vscode/
+#IDE
+ idea/
+ vscode/
 *.swp
 *.swo
-
-# OS
-.DS_Store
+#OS
+ DS_Store
 Thumbs.db
 desktop.ini
-
-# Logs
+#Logs
 *.log
-
-# Distribution
+#Distribution
 output/
 *.exe
